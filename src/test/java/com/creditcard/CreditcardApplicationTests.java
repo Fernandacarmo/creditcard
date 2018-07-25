@@ -1,4 +1,4 @@
-package com.company.creditcard;
+package com.creditcard;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
