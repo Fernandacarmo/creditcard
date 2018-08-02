@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Credit Card</title>
+    <script>
+        function maskExpiryDate() {
+            var v = this.value;
+            if (v.match(/^\d{2}$/) !== null) {
+                this.value = v + '/';
+            } else if (v.match(/^\d{2}\/\d{2}$/) !== null) {
+                this.value = v + '/';
+            }
+        }
+        function dateFormat(el){
+            value = el.value;
+            el.value = value.replace(/^([\d]{2})([\d]{2})([\d]{4})$/,"$1/$2/$3");
+        }
+    </script>
+</head>
+<body>
+<div>
+    <form th:action="@{/creditcard}" th:object="${creditCardModel}" method="post">
+        <h2 >Add a card</h2>
+        <table>
+            <tr>
+                <td>Card Number:</td>
+                <td><input type="text" th:field="*{number}" /></td>
+                <td th:if="${#fields.hasErrors('number')}" th:errors="*{number}"/>
+            </tr>
+            <tr>
+                <td>Name:</td>
+                <td><input type="text" th:field="*{name}" /></td>
+                <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}"/>
+            </tr>
+            <tr>
+                <td>Expiry Date:</td>
+                <td><input th:type="text" th:field="*{expiryDate}" th:value="${#dates.format(creditCardModel.expiryDate, 'dd/MM/yyyy')}"
+                           pattern="[0-9]{1,2}/[0-9]{1,2}/[0-9]{4}" placeholder="dd/MM/yyyy" maxlength="10"  /></td>
+
+                <td th:if="${#fields.hasErrors('expiryDate')}" th:errors="*{expiryDate}"/>
+            </tr>
+            <tr>
+                <td><button type="submit">Submit</button></td>
+                <td><input th:type="reset" value="Reset"/></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
+</form>
+</body>
+</html>

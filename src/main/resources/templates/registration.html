@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Credit Card</title>
+</head>
+<body>
+<div>
+    <form th:action="@{/registration}" th:object="${userModel}" method="post">
+        <h2 >Create an account</h2>
+        <table>
+            <tr>
+                <td>User Name:</td>
+                <td><input type="text" th:field="*{username}" /></td>
+                <td th:if="${#fields.hasErrors('username')}" th:errors="*{username}"/>
+            </tr>
+            <tr>
+                <td>Password:</td>
+                <td><input type="password" th:field="*{password}" /></td>
+                <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}"/>
+            </tr>
+            <tr>
+                <td><button type="submit">Submit</button></td>
+                <td><input th:type="reset" value="Reset"/></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
+</form>
+</body>
+</html>

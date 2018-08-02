@@ -2,6 +2,7 @@ package com.creditcard.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 import javax.persistence.CascadeType;
@@ -36,7 +37,8 @@ public class CreditCard {
         return id;
     }
 
-    @Temporal(value = TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Temporal(TemporalType.DATE)
     public Date getExpiryDate() {
         return expiryDate;
     }

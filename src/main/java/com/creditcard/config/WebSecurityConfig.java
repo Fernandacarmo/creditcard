@@ -24,13 +24,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AuthenticationManager customAuthenticationManager() throws Exception {
-        return authenticationManager();
+    @Override
+    public AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/resources/**", "/registration").permitAll()
+        http.authorizeRequests().antMatchers("/","/registration").permitAll()
             .anyRequest().authenticated()
             .and().formLogin().loginPage("/login").permitAll()
             .and().logout().permitAll();

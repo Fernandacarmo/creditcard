@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Credit Card</title>
+</head>
+<body>
+<h1 th:inline="text">Welcome [[${#httpServletRequest.remoteUser}]]!</h1>
+<div th:if="${cardError != null}">
+    Invalid card number.
+</div>
+<div>
+<form th:action="@{/search}" method="post">
+    <h2 >Search a card</h2>
+    <table>
+        <tr>
+            <td>Card Number:</td>
+            <td><input type="text" name="cardNumber" autofocus="true"/></td>
+        </tr>
+        <tr>
+            <td><button type="submit">Submit</button></td>
+        </tr>
+    </table>
+</form>
+    <h4><a th:href="@{/creditcard}">Add a card</a></h4>
+</div>
+<div th:if="${not #lists.isEmpty(cards)}">
+    <h2>Creditcard List</h2>
+    <table>
+        <tr>
+            <th>Number</th>
+            <th>Name</th>
+            <th>Expiry Date</th>
+        </tr>
+        <tr th:each="card : ${cards}">
+            <td th:text="${card.number}"></td>
+            <td th:text="${card.name}"></td>
+            <td th:text="${card.expiryDate}"></td>
+        </tr>
+    </table>
+</div>
+<form th:action="@{/logout}" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <input type="submit" value="Sign Out"/>
+</form>
+</body>
+</html>

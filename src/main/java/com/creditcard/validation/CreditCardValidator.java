@@ -6,6 +6,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import java.util.Date;
+
 @Component
 public class CreditCardValidator implements Validator {
 
@@ -19,9 +21,17 @@ public class CreditCardValidator implements Validator {
         CreditCard creditCard = (CreditCard) target;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "number", "NotEmpty");
+        if (creditCard.getNumber().length() < 10 || creditCard.getNumber().length() > 16) {
+            errors.rejectValue("number", "Size.creditCardModel.number");
+        }
         if (!checkCreditCard(creditCard.getNumber())) {
             errors.rejectValue("number", "Invalid.creditCardModel.number");
         }
+
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "expiryDate", "NotEmpty");
+//        if (creditCard.getExpiryDate().before(new Date())) {
+//            errors.rejectValue("expiryDate", "Invalid.creditCardModel.expiryDate");
+//        }
     }
 
     private boolean checkCreditCard(String ccNumber) {

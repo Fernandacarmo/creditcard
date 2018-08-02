@@ -12,8 +12,7 @@ mvn clean spring-boot:run
 - Maven
 - Spring Boot
 - String Security
-- Spring MVC / JSP
+- Spring MVC / Thymeleaf
 - Spring Validation
-- Spring Data
-- JPA / Hibernate
+- Spring Data JPA / Hibernate
 - H2 Database
