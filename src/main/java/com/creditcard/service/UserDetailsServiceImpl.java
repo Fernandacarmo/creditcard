@@ -29,10 +29,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) {
-        if (username.isEmpty()) {
-            ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        }
         try {
+            if (username.isEmpty()) {
+                username = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+            }
             User user = userDAO.findByUsername(username);
 
             Set<GrantedAuthority> grantedAuthorities = new HashSet<>();

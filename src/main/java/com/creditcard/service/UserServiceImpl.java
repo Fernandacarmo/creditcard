@@ -13,14 +13,19 @@ import java.util.stream.Stream;
 import static com.creditcard.repository.RoleDAO.ROLE_USER;
 
 @Service
-public class UserServiceImpl implements IUserService {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDAO userDAO;
+
     @Autowired
     private RoleDAO roleDAO;
+
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    private SecurityService securityService;
 
     @Override
     public void save(User user) {
@@ -33,4 +38,9 @@ public class UserServiceImpl implements IUserService {
     public User findByUsername(String username) {
         return userDAO.findByUsername(username);
     }
+
+    public User findByUsername() {
+        return userDAO.findByUsername(securityService.findLoggedInUsername());
+    }
+
 }

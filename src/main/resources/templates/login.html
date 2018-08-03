@@ -5,12 +5,8 @@
     <title>Credit Card </title>
 </head>
 <body>
-<div th:if="${error != null}" th:text="${error}" >
-    Invalid username and password.
-</div>
-<div th:if="${logout != null}" th:text="${logout}" >
-    You have been logged out.
-</div>
+<span th:if="${error != null}" th:text="#{${error}}" />
+<span th:if="${logout != null}" th:text="#{${logout}}" />
 <div>
     <form th:action="@{/login}" method="post">
         <h2 >Log in</h2>

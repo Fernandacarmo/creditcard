@@ -1,7 +1,7 @@
 package com.creditcard.validation;
 
 import com.creditcard.model.User;
-import com.creditcard.service.IUserService;
+import com.creditcard.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -12,7 +12,7 @@ import org.springframework.validation.Validator;
 public class UserValidator implements Validator {
 
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     @Override
     public boolean supports(Class<?> aClass) {

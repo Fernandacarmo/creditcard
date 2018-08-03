@@ -1,8 +1,8 @@
 package com.creditcard.web;
 
 import com.creditcard.model.User;
-import com.creditcard.service.ISecurityService;
-import com.creditcard.service.IUserService;
+import com.creditcard.service.SecurityService;
+import com.creditcard.service.UserService;
 import com.creditcard.validation.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,15 +16,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class UserController {
 
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     @Autowired
-    private ISecurityService securityService;
+    private SecurityService securityService;
 
     @Autowired
     private UserValidator userValidator;
 
-    @GetMapping(value = "/login")
+    @GetMapping(value = {"/", "/login"})
     public String login(Model model, String error, String logout) {
 
         if (error != null) {
@@ -52,7 +52,6 @@ public class UserController {
         }
         String passwordBeforeEncode = userModel.getPassword();
         userService.save(userModel);
-
         securityService.autologin(userModel.getUsername(), passwordBeforeEncode);
 
         return "redirect:/search";

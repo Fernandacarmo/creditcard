@@ -8,19 +8,13 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class CreditcardApplication extends SpringBootServletInitializer {
+public class CreditcardApplication  {
 
     private static final Logger logger = LoggerFactory.getLogger(CreditcardApplication.class);
     
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(CreditcardApplication.class);
-    }
-
     public static void main(String[] args) {
 
         SpringApplication.run(CreditcardApplication.class, args);
-
 
         logger.info("==========================================================");
         logger.info("======================== DEPLOYED ========================");

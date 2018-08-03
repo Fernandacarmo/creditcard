@@ -1,6 +1,7 @@
 package com.creditcard.repository;
 
 import com.creditcard.model.CreditCard;
+import com.creditcard.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.text.SimpleDateFormat;
@@ -14,4 +15,6 @@ public interface CreditCardDAO extends JpaRepository<CreditCard, Long> {
 
     List<CreditCard> getAllByNumberStartingWith(String number);
 
+    List<CreditCard> findAllByUser(User user);
+    List<CreditCard> findAll();
 }
