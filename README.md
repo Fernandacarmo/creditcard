@@ -16,3 +16,7 @@ mvn clean spring-boot:run
 - Spring Validation
 - Spring Data JPA / Hibernate
 - H2 Database
+
+# About users
+Only the default user "admin" has credentials for the role ADMIN.
+All the new users will have the role USER.

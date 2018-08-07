@@ -1,17 +1,19 @@
 package com.creditcard.service;
 
-import com.creditcard.model.CreditCard;
-import com.creditcard.model.User;
-import com.creditcard.repository.CreditCardDAO;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.util.List;
-
-import static com.creditcard.repository.CreditCardDAO.formatExpiryDate;
+import com.creditcard.model.CreditCard;
+import com.creditcard.model.User;
+import com.creditcard.repository.CreditCardDAO;
 
 @Service
 public class CreditCardServiceImpl implements CreditCardService {
@@ -23,39 +25,51 @@ public class CreditCardServiceImpl implements CreditCardService {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private SecurityService securityService;
 
     @Override
+    @Transactional
     public void save(CreditCard creditCard) {
-        User user = userService.findByUsername();
-        creditCard.setUser(user);
+        Optional<User> user = userService.findByUsername();
+        
+        if (user.isPresent()) {
+            Optional<CreditCard> oldCard = findByNumberAndUserId(creditCard.getNumber(), user.get().getId());
+            
+            if (oldCard.isPresent()) {
+            	logger.debug("Card already exists: " + oldCard.get().getNumber());
+            	oldCard.get().setExpiryDate(creditCard.getExpiryDate());
+            	creditCardDAO.save(oldCard.get());
 
-        creditCardDAO.save(creditCard);
-        try {
-            String correctDate = formatExpiryDate.format(creditCard.getExpiryDate());
-            creditCard.setExpiryDate(formatExpiryDate.parse(correctDate));
-        } catch (ParseException e) {
-            logger.info(e.getMessage());
+            } else {
+                creditCard.setUser(user.get());        	
+                creditCardDAO.save(creditCard);
+            }                	
+        } else {
+        	logger.error("Couldn't find logged in user when saving card: " + creditCard.getNumber());
         }
     }
 
     @Override
-    public CreditCard findByNumber(String number) {
-        return creditCardDAO.findByNumber(number);
+    public Optional<CreditCard> findByNumberAndUserId(String number, Long userId) {
+        return creditCardDAO.findByNumberAndUserId(number, userId);
     }
 
     @Override
-    public List<CreditCard> getAllByNumberStartingWith(String number) {
-        return creditCardDAO.getAllByNumberStartingWith(number);
+    public List<CreditCard> findAllByNumberContaining(String number) {
+    	
+    	if (securityService.hasAdminRole()) {
+    		return creditCardDAO.findAllByNumberContaining(number);
+    	
+    	} else {	
+            Optional<User> user = userService.findByUsername();
+            if (user.isPresent()) {
+                return creditCardDAO.findAllByNumberContainingAndUserId(number, user.get().getId());            	
+            } else {
+            	return new ArrayList<CreditCard>();
+            }
+    	}    	
     }
 
-    @Override
-    public List<CreditCard> findAll() {
-        return creditCardDAO.findAll();
-    }
-
-    @Override
-    public List<CreditCard> findAllByUser() {
-        User user = userService.findByUsername();
-        return creditCardDAO.findAllByUser(user);
-    }
 }

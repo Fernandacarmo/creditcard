@@ -1,16 +1,18 @@
 package com.creditcard.service;
 
-import com.creditcard.model.User;
-import com.creditcard.repository.RoleDAO;
-import com.creditcard.repository.UserDAO;
+import static com.creditcard.repository.RoleDAO.ROLE_USER;
+
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static com.creditcard.repository.RoleDAO.ROLE_USER;
+import com.creditcard.model.User;
+import com.creditcard.repository.RoleDAO;
+import com.creditcard.repository.UserDAO;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -35,11 +37,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUsername(String username) {
+    public Optional<User> findByUsername(String username) {
         return userDAO.findByUsername(username);
     }
 
-    public User findByUsername() {
+    public Optional<User> findByUsername() {
         return userDAO.findByUsername(securityService.findLoggedInUsername());
     }
 

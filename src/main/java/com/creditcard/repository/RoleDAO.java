@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface RoleDAO extends JpaRepository<Role, Long> {
 
     static String ROLE_USER = "USER";
-    static String ROLE_SYSADMIN = "SYS_ADMIN";
+    static String ROLE_SYSADMIN = "SYSADMIN";
 
     Role findByName(String name);
 }

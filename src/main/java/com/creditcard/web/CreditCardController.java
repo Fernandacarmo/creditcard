@@ -1,11 +1,7 @@
 package com.creditcard.web;
 
-import com.creditcard.model.CreditCard;
-import com.creditcard.model.User;
-import com.creditcard.service.CreditCardService;
-import com.creditcard.service.SecurityService;
-import com.creditcard.service.UserService;
-import com.creditcard.validation.CreditCardValidator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,8 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.creditcard.model.CreditCard;
+import com.creditcard.service.CreditCardService;
+import com.creditcard.validation.CreditCardValidator;
 
 @Controller
 public class CreditCardController {
@@ -32,19 +29,13 @@ public class CreditCardController {
         if (error != null) {
             model.addAttribute("cardError", "Invalid.creditCardModel.number");
         }
-
         return "search";
     }
 
     @PostMapping(value = "/search")
     public String searchCard(@ModelAttribute(value = "cardNumber") String cardNumber, BindingResult bindingResult, Model model) {
 
-        List<CreditCard> cards;
-        if (!cardNumber.isEmpty() ) {
-            cards = creditCardService.getAllByNumberStartingWith(cardNumber);
-        } else {
-            cards = creditCardService.findAllByUser();
-        }
+        List<CreditCard> cards = creditCardService.findAllByNumberContaining(cardNumber);
 
         if (cards.isEmpty()) {
             model.addAttribute("cardError", "Inexistent.creditcard.number");
@@ -53,7 +44,6 @@ public class CreditCardController {
         }
         return "search";
     }
-
 
     @GetMapping(value = "/creditcard")
     public String insertCard(Model model) {
@@ -71,8 +61,6 @@ public class CreditCardController {
             return "creditcard";
         }
         creditCardService.save(creditCardModel);
-
         return "redirect:/search";
     }
-
 }

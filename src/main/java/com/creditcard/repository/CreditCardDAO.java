@@ -1,20 +1,24 @@
 package com.creditcard.repository;
 
-import com.creditcard.model.CreditCard;
-import com.creditcard.model.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.creditcard.model.CreditCard;
 
 public interface CreditCardDAO extends JpaRepository<CreditCard, Long> {
 
-    static SimpleDateFormat formatExpiryDate = new SimpleDateFormat("yy/MM");
+    @SuppressWarnings("unchecked")
+	CreditCard save(CreditCard creditCard);
+        
+    @Query("FROM CreditCard cc WHERE cc.number = ?1 AND cc.user.id = ?2")
+    Optional<CreditCard> findByNumberAndUserId(String number, Long userId);
 
-    CreditCard findByNumber(String number);
+    List<CreditCard> findAllByNumberContaining(String number);
 
-    List<CreditCard> getAllByNumberStartingWith(String number);
+    @Query("FROM CreditCard cc WHERE cc.number LIKE %?1% AND cc.user.id = ?2")
+    List<CreditCard> findAllByNumberContainingAndUserId(String number, Long userId);
 
-    List<CreditCard> findAllByUser(User user);
-    List<CreditCard> findAll();
-}
+ }

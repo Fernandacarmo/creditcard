@@ -1,5 +1,7 @@
 package com.creditcard.service;
 
+import static com.creditcard.repository.RoleDAO.ROLE_SYSADMIN;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +26,20 @@ public class SecurityServiceImpl implements SecurityService {
     @Override
     public String findLoggedInUsername() {
         String userName = null;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object principal = getAuthentication().getPrincipal();
 
         if (principal instanceof UserDetails) {
-            userName = ((UserDetails)principal).getUsername(); //((User) user).getUsername()
+            userName = ((UserDetails)principal).getUsername();
         } else {
             userName = principal.toString();
         }
         return userName;
+    }
+    
+    @Override
+    public boolean hasAdminRole() {    	
+    	return getAuthentication().getAuthorities().stream()
+    			.anyMatch(r -> r.getAuthority().equalsIgnoreCase(ROLE_SYSADMIN));
     }
 
     @Override
@@ -48,4 +56,9 @@ public class SecurityServiceImpl implements SecurityService {
             logger.debug(String.format("Auto login %s successfully!", username));
         }
     }
+
+	@Override
+	public Authentication getAuthentication() {
+		return SecurityContextHolder.getContext().getAuthentication();
+	}
 }

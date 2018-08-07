@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
+    <link th:href="@{/css/styles.css}" rel="stylesheet" type="text/css">
     <title>Credit Card</title>
 </head>
 <body>
@@ -20,15 +21,12 @@
                 <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}"/>
             </tr>
             <tr>
-                <td><button type="submit">Submit</button></td>
-                <td><input th:type="reset" value="Reset"/></td>
+            	<td/>
+                <td><button type="submit">Create</button></td>
             </tr>
         </table>
     </form>
+    <h4><a th:href="@{/login}">Return</a></h4>
 </div>
-<form th:action="@{/logout}" method="post">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-    <input type="submit" value="Sign Out"/>
-</form>
 </body>
 </html>
