@@ -48,7 +48,7 @@ public class CreditCardController {
     @GetMapping(value = "/creditcard")
     public String insertCard(Model model) {
 
-        model.addAttribute("creditCardModel", new CreditCard());
+        model.addAttribute("creditCardModel", CreditCard.builder().build());
         return "creditcard";
     }
 

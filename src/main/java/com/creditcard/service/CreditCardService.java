@@ -7,7 +7,7 @@ import com.creditcard.model.CreditCard;
 
 public interface CreditCardService {
 
-    void save(CreditCard creditCard);
+    CreditCard save(CreditCard creditCard);
 	Optional<CreditCard> findByNumberAndUserId(String number, Long userId);
 	List<CreditCard> findAllByNumberContaining(String number);
 }

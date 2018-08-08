@@ -1,6 +1,6 @@
 package com.creditcard.service;
 
-import static com.creditcard.repository.RoleDAO.ROLE_SYSADMIN;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.creditcard.util.RoleEnum;
 
 @Service
 public class SecurityServiceImpl implements SecurityService {
@@ -24,8 +26,8 @@ public class SecurityServiceImpl implements SecurityService {
     private UserDetailsServiceImpl userDetailsService;
 
     @Override
-    public String findLoggedInUsername() {
-        String userName = null;
+    public Optional<String> findLoggedInUsername() {
+        String userName;
         Object principal = getAuthentication().getPrincipal();
 
         if (principal instanceof UserDetails) {
@@ -33,13 +35,13 @@ public class SecurityServiceImpl implements SecurityService {
         } else {
             userName = principal.toString();
         }
-        return userName;
+        return Optional.ofNullable(userName);
     }
     
     @Override
     public boolean hasAdminRole() {    	
     	return getAuthentication().getAuthorities().stream()
-    			.anyMatch(r -> r.getAuthority().equalsIgnoreCase(ROLE_SYSADMIN));
+    			.anyMatch(r -> r.getAuthority().equalsIgnoreCase(RoleEnum.ROLE_SYSADMIN.getRole()));
     }
 
     @Override

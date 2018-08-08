@@ -27,7 +27,7 @@ public class CreditCardValidator implements Validator {
         if (creditCard.getNumber().length() < 10 || creditCard.getNumber().length() > 16) {
             errors.rejectValue("number", "Size.creditCardModel.number");
         
-        } else if (!checkCreditCard(creditCard.getNumber())) {
+        } else if (!isCreditCardNumberValid(creditCard.getNumber())) {
             errors.rejectValue("number", "Invalid.creditCardModel.number");
         }
 
@@ -37,15 +37,9 @@ public class CreditCardValidator implements Validator {
         }
         
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "expiryDate", "NotEmpty");
-//        try {        	
-//            creditCard.getExpiryDate();
-//        } catch (Exception e) {
-//        	logger.error("Field expiryDate : " + e.getMessage());
-//            errors.rejectValue("expiryDate", "Invalid.creditCardModel.expiryDate");        	
-//        }
     }
 
-    private boolean checkCreditCard(String ccNumber) {
+    private boolean isCreditCardNumberValid(String ccNumber) {
         int sum = 0;
         boolean alternate = false;
         try {

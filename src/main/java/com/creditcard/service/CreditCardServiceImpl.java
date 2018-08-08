@@ -31,7 +31,7 @@ public class CreditCardServiceImpl implements CreditCardService {
 
     @Override
     @Transactional
-    public void save(CreditCard creditCard) {
+    public CreditCard save(CreditCard creditCard) {
         Optional<User> user = userService.findByUsername();
         
         if (user.isPresent()) {
@@ -40,14 +40,15 @@ public class CreditCardServiceImpl implements CreditCardService {
             if (oldCard.isPresent()) {
             	logger.debug("Card already exists: " + oldCard.get().getNumber());
             	oldCard.get().setExpiryDate(creditCard.getExpiryDate());
-            	creditCardDAO.save(oldCard.get());
+            	return creditCardDAO.save(oldCard.get());
 
             } else {
                 creditCard.setUser(user.get());        	
-                creditCardDAO.save(creditCard);
+                return creditCardDAO.save(creditCard);
             }                	
         } else {
         	logger.error("Couldn't find logged in user when saving card: " + creditCard.getNumber());
+        	return null;
         }
     }
 

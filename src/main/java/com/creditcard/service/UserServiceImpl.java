@@ -1,7 +1,5 @@
 package com.creditcard.service;
 
-import static com.creditcard.repository.RoleDAO.ROLE_USER;
-
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -13,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.creditcard.model.User;
 import com.creditcard.repository.RoleDAO;
 import com.creditcard.repository.UserDAO;
+import com.creditcard.util.RoleEnum;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,10 +29,11 @@ public class UserServiceImpl implements UserService {
     private SecurityService securityService;
 
     @Override
-    public void save(User user) {
+    public User save(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRoles(Stream.of(roleDAO.findByName(ROLE_USER)).collect(Collectors.toSet()));
-        userDAO.save(user);
+        user.setRoles(Stream.of(roleDAO.findByName(RoleEnum.ROLE_USER.getRole()))
+        		.collect(Collectors.toSet()));
+        return userDAO.save(user);
     }
 
     @Override
@@ -42,7 +42,12 @@ public class UserServiceImpl implements UserService {
     }
 
     public Optional<User> findByUsername() {
-        return userDAO.findByUsername(securityService.findLoggedInUsername());
+    	Optional<String> username = securityService.findLoggedInUsername();
+    	if (username.isPresent()) {
+            return userDAO.findByUsername(username.get());    		
+    	} else {
+    		return Optional.empty();
+    	}
     }
 
 }

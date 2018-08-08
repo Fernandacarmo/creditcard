@@ -6,6 +6,7 @@
     <title>Credit Card </title>
 </head>
 <body>
+<h1 th:inline="text">Credit Card Application</h1>
 <span th:if="${error != null}" th:text="#{${error}}" />
 <span th:if="${logout != null}" th:text="#{${logout}}" />
 <div>
@@ -21,6 +22,7 @@
                 <td><input type="password" name="password" /></td>
             </tr>
             <tr>
+            	<td/>
                 <td><button type="submit">Submit</button></td>
             </tr>
         </table>

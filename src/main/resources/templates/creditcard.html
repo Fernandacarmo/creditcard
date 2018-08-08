@@ -6,6 +6,8 @@
     <title>Credit Card</title>
 </head>
 <body>
+<h1 th:inline="text">Credit Card Application</h1>
+<h2 th:inline="text">User: [[${#httpServletRequest.remoteUser}]]</h2>
 <div>
     <form th:action="@{/creditcard}" th:object="${creditCardModel}" method="post">
         <h2 >Add a card</h2>
@@ -28,7 +30,7 @@
             </tr>
             <tr>
             	<td/>
-                <td><button type="submit">Submit</button></td>
+                <td><button type="submit">Save</button></td>
             </tr>
         </table>
     </form>

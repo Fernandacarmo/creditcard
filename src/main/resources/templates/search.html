@@ -6,7 +6,8 @@
     <title>Credit Card</title>
 </head>
 <body>
-<h1 th:inline="text">[[${#httpServletRequest.remoteUser}]]'s Credit Card Details</h1>
+<h1 th:inline="text">Credit Card Application</h1>
+<h2 th:inline="text">User: [[${#httpServletRequest.remoteUser}]]</h2>
 <span th:if="${cardError != null}" th:text="#{${cardError}}" />
 <div>
 <form th:action="@{/search}" method="post">
@@ -17,6 +18,7 @@
             <td><input type="text" name="cardNumber" required="required" autofocus="true"/></td>
         </tr>
         <tr>
+        	<td/>
         	<td><button type="submit">Search</button></td>
         </tr>
     </table>
