@@ -1,7 +1,8 @@
 package com.creditcard.service;
 
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -105,7 +106,7 @@ public class CreditCardServiceImplTest {
 		CreditCard card = cardServiceImpl.save(creditCard);
 
 		// then
-		assertNull(card);
+		assertThat(card, nullValue());
 	}
 
 	@Test

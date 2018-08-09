@@ -39,6 +39,11 @@ public class CreditCardValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "expiryDate", "NotEmpty");
     }
 
+    /**
+     * Validates the credit card number according to Luhn algorithm.
+     * @param ccNumber credit card number.
+     * @return true if the number is valid, false if it is not valid or not a number.
+     */
     private boolean isCreditCardNumberValid(String ccNumber) {
         int sum = 0;
         boolean alternate = false;

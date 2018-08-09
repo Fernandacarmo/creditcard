@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.creditcard.util.RoleEnum;
@@ -45,18 +46,22 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     @Override
-    public void autologin(String username, String password) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+    public void autologin(String username, String password) {    	
+    	try {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                    new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
 
-        Authentication auth = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+            Authentication auth = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
-        if (usernamePasswordAuthenticationToken.isAuthenticated()) {
-            SecurityContextHolder.getContext().setAuthentication(auth);
-            logger.debug(String.format("Auto login %s successfully!", username));
-        }
+            if (usernamePasswordAuthenticationToken.isAuthenticated()) {
+                SecurityContextHolder.getContext().setAuthentication(auth);
+                logger.debug(String.format("Auto login %s successfully!", username));
+            }
+    	} catch (UsernameNotFoundException e) {
+    		logger.error("Autologin did not work. Username not found: " + username);
+    	}
     }
 
 	@Override

@@ -32,9 +32,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         
 		Optional<User> user = userDAO.findByUsername(username);
-		logger.debug("Method loadUserByUsername was able to find the user: " + user.isPresent());
 		
 		user.orElseThrow(() -> new UsernameNotFoundException("No user found with username: " + username));
+
+		logger.debug("Method loadUserByUsername was able to find the user: " + user.get().getUsername());
 
 		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 		for (Role role : user.get().getRoles()) {

@@ -9,14 +9,19 @@ Java Web Application for credit card numbers
 mvn clean spring-boot:run
 
 # Technologies 
-- Maven
 - Spring Boot
-- String Security
+- Spring Security
 - Spring MVC / Thymeleaf
 - Spring Validation
 - Spring Data JPA / Hibernate
+- Lombok
 - H2 Database
+- Mockito / Hamcrest
+- Spring Security test
 
 # About users
-Only the default user "admin" has credentials for the role ADMIN.
+Only the default user "admin" has credentials for the role SYSADMIN.
 All the new users will have the role USER.
+
+Note: For tests purposes, all users predefined in database have password "123456".
+More details, please check "data.sql" file.
