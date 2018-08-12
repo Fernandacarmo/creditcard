@@ -19,17 +19,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.creditcard.model.Role;
 import com.creditcard.model.User;
-import com.creditcard.repository.RoleDAO;
-import com.creditcard.repository.UserDAO;
+import com.creditcard.repository.RoleRepository;
+import com.creditcard.repository.UserRepository;
 import com.creditcard.util.RoleEnum;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceImplTest {
 	
 	@Mock
-    private UserDAO userDAO;
+    private UserRepository userRepository;
 	@Mock
-    private RoleDAO roleDAO;
+    private RoleRepository roleRepository;
 	@Mock
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Mock
@@ -51,8 +51,8 @@ public class UserServiceImplTest {
 	public void testSave_shouldReturnUser_whenUserValid() {
 		// given
 		given(bCryptPasswordEncoder.encode(any(CharSequence.class))).willReturn("xyz");
-		given(roleDAO.findByName(anyString())).willReturn(roleUser);
-		given(userDAO.save(any(User.class))).willReturn(user);
+		given(roleRepository.findByName(anyString())).willReturn(roleUser);
+		given(userRepository.save(any(User.class))).willReturn(user);
 
 		// when
 		User user2 = userServiceImpl.save(user);
@@ -65,7 +65,7 @@ public class UserServiceImplTest {
 	@Test
 	public void testFindByUsernameString_shouldReturnUser_whenExists() {
 		// given
-		given(userDAO.findByUsername(anyString())).willReturn(Optional.of(user));
+		given(userRepository.findByUsername(anyString())).willReturn(Optional.of(user));
 
 		// when
 		Optional<User> user2 = userServiceImpl.findByUsername(user.getUsername());
@@ -78,7 +78,7 @@ public class UserServiceImplTest {
 	public void testFindByUsername_shouldReturnUser_WhenExists() {
 		// given
 		given(securityService.findLoggedInUsername()).willReturn(Optional.of("fernanda"));
-		given(userDAO.findByUsername(anyString())).willReturn(Optional.of(user));
+		given(userRepository.findByUsername(anyString())).willReturn(Optional.of(user));
 		
 		// when
 		Optional<User> user2 = userServiceImpl.findByUsername();
@@ -98,6 +98,4 @@ public class UserServiceImplTest {
 		// then
 		assertEquals(user2, Optional.empty());
 	}
-
-
 }

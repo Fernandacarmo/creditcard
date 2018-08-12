@@ -9,18 +9,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.creditcard.model.User;
-import com.creditcard.repository.RoleDAO;
-import com.creditcard.repository.UserDAO;
+import com.creditcard.repository.RoleRepository;
+import com.creditcard.repository.UserRepository;
 import com.creditcard.util.RoleEnum;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserDAO userDAO;
+    private UserRepository userRepository;
 
     @Autowired
-    private RoleDAO roleDAO;
+    private RoleRepository roleRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -31,23 +31,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRoles(Stream.of(roleDAO.findByName(RoleEnum.ROLE_USER.getRole()))
+        user.setRoles(Stream.of(roleRepository.findByName(RoleEnum.ROLE_USER.getRole()))
         		.collect(Collectors.toSet()));
-        return userDAO.save(user);
+        return userRepository.save(user);
     }
 
     @Override
     public Optional<User> findByUsername(String username) {
-        return userDAO.findByUsername(username);
+        return userRepository.findByUsername(username);
     }
 
     public Optional<User> findByUsername() {
     	Optional<String> username = securityService.findLoggedInUsername();
     	if (username.isPresent()) {
-            return userDAO.findByUsername(username.get());    		
-    	} else {
-    		return Optional.empty();
+            return userRepository.findByUsername(username.get());    		
     	}
+		return Optional.empty();
     }
 
 }

@@ -72,5 +72,4 @@ public class SecurityServiceImplTest {
 		// then
 		assertTrue(usernamePasswordAuthenticationToken.isAuthenticated());
 	}
-
 }

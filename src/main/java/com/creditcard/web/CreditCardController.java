@@ -33,7 +33,7 @@ public class CreditCardController {
     }
 
     @PostMapping(value = "/search")
-    public String searchCard(@ModelAttribute(value = "cardNumber") String cardNumber, BindingResult bindingResult, Model model) {
+    public String searchCard(@ModelAttribute("cardNumber") String cardNumber, BindingResult bindingResult, Model model) {
 
         List<CreditCard> cards = creditCardService.findAllByNumberContaining(cardNumber);
 

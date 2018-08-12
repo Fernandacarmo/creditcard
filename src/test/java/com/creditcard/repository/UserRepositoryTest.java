@@ -15,36 +15,45 @@ import com.creditcard.model.User;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class UserDAOTest {
+public class UserRepositoryTest {
 
 	@Autowired
 	private TestEntityManager entityManager;
 	@Autowired
-	private UserDAO userDAO;
+	private UserRepository userRepository;
 
 	@Test
 	public void testSaveUser() {
 		// given
-		User user = User.builder().id(3L).username("anotherfernanda").build();
+		User user = User.builder().username("anotherfernanda").build();
 		
 		// when
-		User user2 = userDAO.save(user);
+		User user2 = userRepository.save(user);
 		
 		// then
-		assertEquals(entityManager.getId(user2), user.getId());
-		
+		assertEquals(entityManager.getId(user2), user.getId());		
 	}
 
 	@Test
-	public void testFindByUsername() {
+	public void testFindByUsername_shouldReturnUser_whenExists() {
 		// given
-		User user = entityManager.merge(User.builder().id(4L).username("anotheradmin").build());
+		User user = entityManager.merge(User.builder().username("anotheradmin").build());
 		
 		// when
-		Optional<User> user2 = userDAO.findByUsername("anotheradmin");
+		Optional<User> user2 = userRepository.findByUsername("anotheradmin");
 		
 		// then
 		assertEquals(user2.get().getUsername(), user.getUsername());
+		assertEquals(user2.get().getId(), user.getId());
+	}
+
+	@Test
+	public void testFindByUsername_shouldReturnEmpty_whenUserDoesntExist() {
+		// when
+		Optional<User> user = userRepository.findByUsername("userWithNoName");
+		
+		// then
+		assertEquals(user, Optional.empty() );
 	}
 
 }

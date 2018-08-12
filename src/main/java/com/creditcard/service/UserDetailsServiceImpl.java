@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.creditcard.model.Role;
 import com.creditcard.model.User;
-import com.creditcard.repository.UserDAO;
+import com.creditcard.repository.UserRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -25,13 +25,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
     @Autowired
-    private UserDAO userDAO;
+    private UserRepository userRepository;
 
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         
-		Optional<User> user = userDAO.findByUsername(username);
+		Optional<User> user = userRepository.findByUsername(username);
 		
 		user.orElseThrow(() -> new UsernameNotFoundException("No user found with username: " + username));
 

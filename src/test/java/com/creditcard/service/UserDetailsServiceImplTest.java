@@ -19,14 +19,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.creditcard.model.Role;
 import com.creditcard.model.User;
-import com.creditcard.repository.UserDAO;
+import com.creditcard.repository.UserRepository;
 import com.creditcard.util.RoleEnum;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserDetailsServiceImplTest {
 	
 	@Mock
-	private UserDAO userDAO;
+	private UserRepository userRepository;
 	@InjectMocks
 	UserDetailsServiceImpl userDetailsService;
 	
@@ -36,7 +36,7 @@ public class UserDetailsServiceImplTest {
 		Role roleUser = Role.builder().name(RoleEnum.ROLE_USER.getRole()).build();
 		User user = User.builder().id(1L).username("fernanda").password("password")
 				.roles(Stream.of(roleUser).collect(Collectors.toSet())).build();
-		given(userDAO.findByUsername(anyString())).willReturn(Optional.of(user));
+		given(userRepository.findByUsername(anyString())).willReturn(Optional.of(user));
 		
 		// when
 		UserDetails userDetails = userDetailsService.loadUserByUsername("fernanda");
@@ -48,10 +48,9 @@ public class UserDetailsServiceImplTest {
 	@Test(expected = UsernameNotFoundException.class)
 	public void testLoadUserByUsername_shouldReturnException_WhenUserDoesntExist() {
 		// given
-		given(userDAO.findByUsername(anyString())).willReturn(Optional.empty());
+		given(userRepository.findByUsername(anyString())).willReturn(Optional.empty());
 		
 		// when
 		userDetailsService.loadUserByUsername("fernanda");		
 	}
-
 }

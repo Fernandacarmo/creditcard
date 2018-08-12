@@ -27,14 +27,14 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.creditcard.model.CreditCard;
 import com.creditcard.model.Role;
 import com.creditcard.model.User;
-import com.creditcard.repository.CreditCardDAO;
+import com.creditcard.repository.CreditCardRepository;
 import com.creditcard.util.RoleEnum;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CreditCardServiceImplTest {
 
 	@Mock
-	private CreditCardDAO creditCardDAO;
+	private CreditCardRepository creditCardRepository;
 	@Mock
 	private UserService userService;
 	@Mock
@@ -66,9 +66,9 @@ public class CreditCardServiceImplTest {
 	@Test
 	public void testSave_shouldSaveNewCard_whenHasNoCardWithSameNumber() {
 		// given
-		given(creditCardDAO.findByNumberAndUserId(anyString(), anyLong()))
+		given(creditCardRepository.findByNumberAndUserId(anyString(), anyLong()))
 		.willReturn(Optional.empty());
-		given(creditCardDAO.save(any(CreditCard.class))).willReturn(creditCard);
+		given(creditCardRepository.save(any(CreditCard.class))).willReturn(creditCard);
 
 		// when
 		CreditCard card = cardServiceImpl.save(creditCard);
@@ -83,9 +83,9 @@ public class CreditCardServiceImplTest {
 	@Test
 	public void testSave_shouldUpdateOldCard_whenHasCardWithSameNumber() {
 		// given
-		given(creditCardDAO.findByNumberAndUserId(anyString(), anyLong()))
+		given(creditCardRepository.findByNumberAndUserId(anyString(), anyLong()))
 		.willReturn(Optional.of(oldCard));
-		given(creditCardDAO.save(any(CreditCard.class))).willReturn(oldCard);
+		given(creditCardRepository.save(any(CreditCard.class))).willReturn(oldCard);
 
 		// when
 		CreditCard card = cardServiceImpl.save(creditCard);
@@ -112,7 +112,7 @@ public class CreditCardServiceImplTest {
 	@Test
 	public void testFindByNumberAndUserId_shouldReturnCard_WhenItExists() {
 		// given
-		given(creditCardDAO.findByNumberAndUserId(anyString(), anyLong()))
+		given(creditCardRepository.findByNumberAndUserId(anyString(), anyLong()))
 		.willReturn(Optional.of(creditCard));
 
 		// when
@@ -131,7 +131,7 @@ public class CreditCardServiceImplTest {
 				.roles(Stream.of(roleAdmin).collect(Collectors.toSet())).build();
 		oldCard.setUser(admin);
 
-		given(creditCardDAO.findAllByNumberContaining(anyString()))
+		given(creditCardRepository.findAllByNumberContaining(anyString()))
 		.willReturn(Arrays.asList(creditCard, oldCard));
 
 		// when
@@ -150,7 +150,7 @@ public class CreditCardServiceImplTest {
 		given(securityService.hasAdminRole()).willReturn(false);
 		oldCard.setUser(admin);
 
-		given(creditCardDAO.findAllByNumberContainingAndUserId(anyString(), anyLong()))
+		given(creditCardRepository.findAllByNumberContainingAndUserId(anyString(), anyLong()))
 		.willReturn(Arrays.asList(creditCard));
 
 		// when
@@ -172,6 +172,5 @@ public class CreditCardServiceImplTest {
 
 		// then
 		assertEquals(cards.size(), 0);
-	}
-	
+	}	
 }

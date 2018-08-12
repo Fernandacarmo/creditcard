@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.creditcard.model.User;
 
-public interface UserDAO extends JpaRepository<User, Long>{
+public interface UserRepository extends JpaRepository<User, Long>{
 
 	@SuppressWarnings("unchecked")
 	User save(User user);

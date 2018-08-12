@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.creditcard.model.CreditCard;
 
-public interface CreditCardDAO extends JpaRepository<CreditCard, Long> {
+public interface CreditCardRepository extends JpaRepository<CreditCard, Long> {
 
     @SuppressWarnings("unchecked")
 	CreditCard save(CreditCard creditCard);

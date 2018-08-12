@@ -27,8 +27,8 @@ public class UserController {
 
     @GetMapping(value = {"/", "/login"})
     public String login(Model model, String error, String logout) {
-
-        if (error != null) {
+        
+    	if (error != null) {
             model.addAttribute("error", "Invalid.userModel.credentials");
         }
         if (logout != null) {
@@ -39,14 +39,15 @@ public class UserController {
 
     @GetMapping(value = "/registration")
     public String registration(Model model) {
-        model.addAttribute("userModel", User.builder().build());
-
+        
+    	model.addAttribute("userModel", User.builder().build());
         return "registration";
     }
 
     @PostMapping(value = "/registration")
     public String registration(@ModelAttribute("userModel") User userModel, BindingResult bindingResult, Model model) {
-        userValidator.validate(userModel, bindingResult);
+        
+    	userValidator.validate(userModel, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "registration";

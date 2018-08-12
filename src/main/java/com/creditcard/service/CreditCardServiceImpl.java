@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.creditcard.model.CreditCard;
 import com.creditcard.model.User;
-import com.creditcard.repository.CreditCardDAO;
+import com.creditcard.repository.CreditCardRepository;
 
 @Service
 public class CreditCardServiceImpl implements CreditCardService {
@@ -21,7 +21,7 @@ public class CreditCardServiceImpl implements CreditCardService {
     private static final Logger logger = LoggerFactory.getLogger(CreditCardServiceImpl.class);
 
     @Autowired
-    private CreditCardDAO creditCardDAO;
+    private CreditCardRepository creditCardRepository;
 
     @Autowired
     private UserService userService;
@@ -40,12 +40,11 @@ public class CreditCardServiceImpl implements CreditCardService {
             if (oldCard.isPresent()) {
             	logger.debug("Card already exists: " + oldCard.get().getNumber());
             	oldCard.get().setExpiryDate(creditCard.getExpiryDate());
-            	return creditCardDAO.save(oldCard.get());
-
-            } else {
-                creditCard.setUser(user.get());        	
-                return creditCardDAO.save(creditCard);
-            }                	
+            	return creditCardRepository.save(oldCard.get());
+            } 
+            creditCard.setUser(user.get());        	
+            return creditCardRepository.save(creditCard);
+            
         } else {
         	logger.error("Couldn't find logged in user when saving card: " + creditCard.getNumber());
         	return null;
@@ -54,19 +53,19 @@ public class CreditCardServiceImpl implements CreditCardService {
 
     @Override
     public Optional<CreditCard> findByNumberAndUserId(String number, Long userId) {
-        return creditCardDAO.findByNumberAndUserId(number, userId);
+        return creditCardRepository.findByNumberAndUserId(number, userId);
     }
 
     @Override
     public List<CreditCard> findAllByNumberContaining(String number) {
     	
     	if (securityService.hasAdminRole()) {
-    		return creditCardDAO.findAllByNumberContaining(number);
+    		return creditCardRepository.findAllByNumberContaining(number);
     	
     	} else {	
             Optional<User> user = userService.findByUsername();
             if (user.isPresent()) {
-                return creditCardDAO.findAllByNumberContainingAndUserId(number, user.get().getId());            	
+                return creditCardRepository.findAllByNumberContainingAndUserId(number, user.get().getId());            	
             } else {
             	return new ArrayList<CreditCard>();
             }
